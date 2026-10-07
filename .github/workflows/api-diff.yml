@@ -43,13 +43,13 @@ jobs:
       - uses: ./crucible-actions/setup-crucible
         id: tooling
         with:
-          crucible-ref: 98bf404f86f99b7b9a759ca984f3ed4e9acc5f6c
+          crucible-ref: d11e9d32a5546011bf63f9f618c39cac4e82d70e
           token: ${{ steps.app-token.outputs.token }}
       - uses: ./crucible-actions/api-diff
         with:
           cli: ${{ steps.tooling.outputs.cli }}
           before: baseline/smithy
-          after: proposed/smithy
+          after: proposed/smithy/model
           config: proposed/crucible.toml
       - uses: actions/upload-artifact@v4
         if: always()
