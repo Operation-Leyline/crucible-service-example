@@ -39,6 +39,11 @@ def main():
     for manifest in ["target/rust-sdk/Cargo.toml", "target/java-sdk/build.gradle.kts"]:
         if not (ROOT / manifest).is_file():
             raise RuntimeError(f"Model build did not generate {manifest}")
+    # The model build also exports the current release's OpenAPI document.
+    openapi = ROOT / "target/openapi/openapi.json"
+    document = json.loads(openapi.read_text(encoding="utf-8")) if openapi.is_file() else {}
+    if not str(document.get("openapi", "")).startswith("3.1") or "/items" not in document.get("paths", {}):
+        raise RuntimeError("Model build did not generate a complete target/openapi/openapi.json")
     run(["cargo", "fmt", "--all", "--check"])
     run(["cargo", "fmt", "--manifest-path", "client/Cargo.toml", "--all", "--check"])
     run(["cargo", "test", "--workspace", "--locked"])
@@ -71,7 +76,7 @@ def main():
         for expected in ["Created ", "Read: ", "Updated: ", "Listed: ", "Deleted "]:
             if expected not in output:
                 raise RuntimeError(f"Kotlin example did not report {expected!r}")
-        with urllib.request.urlopen(endpoint + "/items", timeout=10) as response:
+        with urllib.request.urlopen(endpoint + "/items?maxResults=100", timeout=10) as response:
             if json.load(response)["items"]:
                 raise RuntimeError("SDK examples left temporary items behind")
         print("Service, independent Rust SDK consumer, Gradle Kotlin consumer of the Java SDK, pagination and cleanup passed")
