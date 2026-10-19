@@ -1,12 +1,13 @@
-# Crucible service template
+# Crucible service example
 
-A monorepo template with a language-neutral model in Crucible's modelling language (`.cru`), generated Rust and Java SDKs, a Rust service, and independent client examples. The `Item` resource has five working API handlers and an in-memory backend.
+A complete, working example of a Crucible service. To start your own service, use the [Crucible service template](https://github.com/Operation-Leyline/crucible-service-template) instead: it has the same model and service layout without the release history, migrations and SDK consumers shown here.
+
+This example is a monorepo with a language-neutral model in Crucible's modelling language (`.cru`), generated Rust and Java SDKs, a Rust service, and independent client examples. The `Item` resource has five working API handlers and an in-memory backend.
 
 ```text
 Cargo.toml                # Cargo workspace and shared Crucible version
 Cargo.lock                # Shared dependency lockfile
 .github/workflows/
-  api-diff.yml            # PR contract compatibility checks
   sdk.yml                 # Clean builds and both native consumers over HTTP
 model/
   Cargo.toml              # Language-neutral model package
@@ -35,10 +36,9 @@ The root workspace selects `service` by default. Cargo commands work from the re
 
 You only need a modern Rust toolchain (Edition 2024). [Crucible](https://github.com/Operation-Leyline/crucible) is public and fetched automatically by Cargo.
 
-1. Select **Use this template > Create a new repository** on GitHub.
-2. Clone your repository and open it in RustRover.
-3. Let Cargo finish loading, then run `service/src/main.rs`.
-4. Open `service/requests.http` and run the requests in order. The create request saves `itemId` for subsequent requests using a [response handler](https://www.jetbrains.com/help/idea/http-response-handling-examples.html).
+1. Clone this repository (`gh repo clone Operation-Leyline/crucible-service-example`) and open it in RustRover.
+2. Let Cargo finish loading, then run `service/src/main.rs`.
+3. Open `service/requests.http` and run the requests in order. The create request saves `itemId` for subsequent requests using a [response handler](https://www.jetbrains.com/help/idea/http-response-handling-examples.html).
 
 The server prints `Listening on http://127.0.0.1:8080`. You can also run `cargo run` in a terminal. Set `CRUCIBLE_ADDR` to change the address, and `PAGE_TOKEN_SECRET` (32 or more random bytes, such as `openssl rand -hex 32`) to keep page tokens valid across restarts and instances.
 

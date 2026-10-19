@@ -1,4 +1,4 @@
-"""Build the template and exercise both independent SDK consumers over HTTP."""
+"""Build the example and exercise both independent SDK consumers over HTTP."""
 from pathlib import Path
 import json
 import os
